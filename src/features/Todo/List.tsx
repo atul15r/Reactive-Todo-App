@@ -14,6 +14,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 //@ts-ignore
 import { Online } from 'react-detect-offline';
+import _ from 'lodash';
+
 type Props = {
 	data: TodoTypes;
 	length: number;
@@ -51,13 +53,9 @@ export const List: FC<Props> = ({ data, length, index }) => {
 			setLoading(Status.pending);
 			dispatch(todosActions.deleteItem({ todoId }));
 		} else {
-			const copyTodos: TodoTypes[] = Array.from(todos);
+			const copyTodos: TodoTypes[] = _.cloneDeep(todos);
 			let index = copyTodos.findIndex((d: TodoTypes) => d.todoId === data.todoId);
-			let cloneTodo = Object.assign({}, copyTodos[index]);
-			cloneTodo.isDeleted = true;
-			copyTodos.splice(index, 1);
-
-			copyTodos.push(cloneTodo);
+			copyTodos[index].isDeleted = true;
 
 			dispatch(todosActions.offlineDataUpdate(copyTodos));
 		}
@@ -73,14 +71,10 @@ export const List: FC<Props> = ({ data, length, index }) => {
 
 			dispatch(todosActions.updateItem(updateData));
 		} else {
-			const copyTodos: TodoTypes[] = Array.from(todos);
+			const copyTodos: TodoTypes[] = _.cloneDeep(todos);
 			let index = copyTodos.findIndex((d: TodoTypes) => d.todoId === data.todoId);
-			let cloneTodo = Object.assign({}, copyTodos[index]);
-			cloneTodo.body = values.body;
-			cloneTodo.isUpdated = true;
-			copyTodos.splice(index, 1);
-
-			copyTodos.push(cloneTodo);
+			copyTodos[index].body = values.body;
+			copyTodos[index].isUpdated = true;
 
 			dispatch(todosActions.offlineDataUpdate(copyTodos));
 		}

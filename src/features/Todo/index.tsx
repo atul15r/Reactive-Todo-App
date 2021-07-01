@@ -14,6 +14,7 @@ import Loader from 'react-loader-spinner';
 import { List } from './List';
 import { uuid, isUuid } from 'uuidv4';
 import { batch } from 'react-redux';
+import _ from 'lodash';
 
 export function Todo() {
 	const [isOnline, setIsOnline] = React.useState(true);
@@ -43,7 +44,15 @@ export function Todo() {
 	const onSubmit = (values: { body: string }) => {
 		setSubmitting(Status.pending);
 		if (isOnline) dispatch(todosActions.addItem(values));
-		else dispatch(todosActions.addPendingTodos({ ...values, todoId: uuid(), syncRequired: true }));
+		else
+			dispatch(
+				todosActions.addPendingTodos({
+					...values,
+					todoId: uuid(),
+					createdAt: new Date().toISOString(),
+					syncRequired: true
+				})
+			);
 		reset();
 	};
 
@@ -100,6 +109,7 @@ export function Todo() {
 				batch(() => {
 					newData_two.forEach((d: TodoTypes) => {
 						dispatch(todosActions.addItem({ body: d.body }));
+						dispatch(todosActions.fetchItem());
 					});
 				});
 			}
@@ -116,7 +126,6 @@ export function Todo() {
 	}, [isOnline]);
 
 	React.useEffect(() => {
-		console.log('height', secRef.current.clientHeight);
 		setHeight(window.screen.height - secRef.current.clientHeight);
 	}, []);
 
@@ -168,9 +177,11 @@ export function Todo() {
 			{todos.length ? (
 				<section className="mt-7 overflow-y-auto" style={{ maxHeight: height }}>
 					<p className="text-2xl italic ml-4 sm:ml-0">Your Todo's list</p>
-					{todos.map((d: TodoTypes, i) => (
-						<List key={i} index={i} length={todos.length} data={d} />
-					))}
+					{_.sortBy(todos, 'createdAt')
+						.reverse()
+						.map((d: TodoTypes, i) => (
+							<List key={i} index={i} length={todos.length} data={d} />
+						))}
 				</section>
 			) : fetching === Status.pending ? (
 				<section>

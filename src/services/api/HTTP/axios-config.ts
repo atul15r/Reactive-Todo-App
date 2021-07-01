@@ -20,7 +20,6 @@ export function requestHandler<T, D = Record<string, unknown>>({
 	const hasData = ['post', 'put', 'patch'].indexOf(httpMethod) >= 0;
 
 	const settings = options;
-	console.log(':::::::::::::', settings);
 	const request = hasData
 		? axios[httpMethod as 'post' | 'patch' | 'put'](url, data ? data : {}, settings)
 		: axios[httpMethod as 'get'](url, settings);
