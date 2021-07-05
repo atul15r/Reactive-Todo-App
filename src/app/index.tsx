@@ -7,7 +7,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { todosActions } from 'features/Todo/todoSlice';
 
 const App = () => {
-	const { toastData, permissionRequest, modalData } = useSelector(selectAppState);
+	const { toastData, modalData } = useSelector(selectAppState);
 	const dispatch = useDispatch();
 
 	const closeModal = () => dispatch(appActions.resetModal());
