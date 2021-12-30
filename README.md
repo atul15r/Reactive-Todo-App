@@ -1,4 +1,4 @@
-![](src/assets/ss.png)
+<img width="516" alt="Screenshot 2021-12-30 at 8 11 30 PM" src="https://user-images.githubusercontent.com/38523309/147761558-2bb8248b-0efe-49e0-9dd6-a1f8700ea3bd.png">
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
